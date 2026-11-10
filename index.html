@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Egg Point - Online Order</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #fff8e8;
+    margin: 0;
+    padding: 15px;
+}
+header {
+    background: #171717;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 12px;
+}
+header h1 {
+    color: #ffd32a;
+    font-size: 35px;
+}
+.item {
+    background: white;
+    padding: 15px;
+    margin: 12px 0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px #ddd;
+}
+.price {
+    color: #d62828;
+    font-weight: bold;
+}
+input[type=number] {
+    width: 55px;
+    padding: 8px;
+    font-size: 17px;
+}
+input[type=text] {
+    width: 95%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #aaa;
+    border-radius: 7px;
+}
+.total {
+    background: #ffe28a;
+    padding: 18px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 10px;
+}
+button {
+    width: 100%;
+    padding: 16px;
+    background: #168b45;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 19px;
+    font-weight: bold;
+    margin-top: 15px;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>🥚 EGG POINT</h1>
+<p>Fresh & Delicious Eggs</p>
+<h3>ONLINE ORDER MENU</h3>
+</header>
+
+<h2>🍳 Our Menu</h2>
+
+<div class="item" data-name="Kaccha Egg" data-price="8">
+<div>Kaccha Egg (1 Piece)<br>
+<span class="price">₹8 / Piece</span></div>
+<input type="number" min="0" value="0">
+</div>
+
+<div class="item" data-name="Boil Egg" data-price="10">
+<div>Boil Egg (1 Piece)<br>
+<span class="price">₹10 / Piece</span></div>
+<input type="number" min="0" value="0">
+</div>
+
+<div class="item" data-name="2 Egg Fry" data-price="30">
+<div>2 Egg Fry<br>
+<span class="price">₹30 / Plate</span></div>
+<input type="number" min="0" value="0">
+</div>
+
+<div class="item" data-name="2 Egg Omelette" data-price="30">
+<div>2 Egg Omelette<br>
+<span class="price">₹30 / Plate</span></div>
+<input type="number" min="0" value="0">
+</div>
+
+<div class="item" data-name="2 Egg Bhurji" data-price="30">
+<div>2 Egg Bhurji<br>
+<span class="price">₹30 / Plate</span></div>
+<input type="number" min="0" value="0">
+</div>
+
+<h3>Customer Details</h3>
+
+<input type="text" id="customer" placeholder="Enter Your Name">
+
+<input type="text" id="table" placeholder="Room / Table Number">
+
+<div class="total">
+Total Amount: ₹<span id="total">0</span>
+</div>
+
+<button onclick="placeOrder()">
+📲 PLACE ORDER ON WHATSAPP
+</button>
+
+<script>
+
+const items = document.querySelectorAll(".item");
+
+function calculateTotal() {
+    let total = 0;
+
+    items.forEach(item => {
+        let qty = Number(item.querySelector("input").value);
+        let price = Number(item.dataset.price);
+        total += qty * price;
+    });
+
+    document.getElementById("total").innerText = total;
+    return total;
+}
+
+items.forEach(item => {
+    item.querySelector("input").addEventListener("input", calculateTotal);
+});
+
+function placeOrder() {
+
+    let name = document.getElementById("customer").value.trim();
+    let table = document.getElementById("table").value.trim();
+    let total = calculateTotal();
+
+    if (!name) {
+        alert("Please enter your name");
+        return;
+    }
+
+    if (total <= 0) {
+        alert("Please select an item");
+        return;
+    }
+
+    let message = "🥚 EGG POINT NEW ORDER\n\n";
+    message += "Customer: " + name + "\n";
+
+    if (table) {
+        message += "Room/Table: " + table + "\n";
+    }
+
+    message += "\nORDER DETAILS:\n";
+
+    items.forEach(item => {
+
+        let qty = Number(item.querySelector("input").value);
+        let price = Number(item.dataset.price);
+
+        if (qty > 0) {
+            message += item.dataset.name + " x " + qty +
+            " = ₹" + (qty * price) + "\n";
+        }
+    });
+
+    message += "\nTOTAL AMOUNT: ₹" + total;
+
+    let phone = "917734807127";
+
+    let url = "https://wa.me/" + phone +
+    "?text=" + encodeURIComponent(message);
+
+    window.open(url, "_blank");
+}
+
+</script>
+
+</body>
+</html>
